@@ -80,3 +80,24 @@ resource "aws_security_group" "redmi_remote_access" {
   }
 }
 
+############################################
+# creating Ec2 Instance                    #
+############################################
+
+resource "aws_instance" "frontend" {
+
+  ami                    = var.ami-id
+  instance_type          = var.instance_type
+  key_name               = aws_key_pair.redmi_auth.key_name
+  user_data              = file("setup.sh")
+  vpc_security_group_ids = [aws_security_group.redmi_remote_access.id, aws_security_group.redmi_security_group.id]
+  tags = {
+    "Name" = "${var.project_name}-${var.project_env}-frontend"
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+
