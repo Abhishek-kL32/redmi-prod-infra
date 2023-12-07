@@ -37,6 +37,14 @@ resource "aws_security_group" "redmi_security_group" {
     ipv6_cidr_blocks = ["::/0"]
   }
 
+  ingress {
+    from_port        = 8080
+    to_port          = 8080
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+
   egress {
     from_port        = 0
     to_port          = 0
@@ -100,4 +108,16 @@ resource "aws_instance" "frontend" {
   }
 }
 
+############################################
+# create record for webserver              #
+############################################
+
+resource "aws_route53_record" "webserver" {
+
+  zone_id = data.aws_route53_zone.zone-details.id
+  name    = "${var.hostname}.${var.hosted_zone_name}"
+  type    = "A"
+  ttl     = 300
+  records = [aws_instance.frontend.public_ip]
+}
 

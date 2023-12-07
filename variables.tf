@@ -27,3 +27,15 @@ variable "owner" {
   type        = string
   description = "Project Environment"
 }
+variable "hostname" {
+
+  type        = string
+  description = "hostname of the frontend"
+}
+
+variable "hosted_zone_name" {
+
+  type        = string
+  description = "main domain name"
+}
+
